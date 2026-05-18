@@ -1,13 +1,12 @@
 # app.py
 # AbraVenturas ✨
-# App prototipo para generación de historias personalizadas y momentos de conexión
-# Streamlit + OpenAI
 
 # ---------------- LIBRERÍAS ----------------
 import streamlit as st
 from openai import OpenAI
 from PIL import Image
 import requests
+import os
 
 # ---------------- CONFIGURACIÓN ----------------
 st.set_page_config(
@@ -40,6 +39,7 @@ h2, h3 {
     padding: 10px 20px;
     border: none;
     font-weight: bold;
+    font-size: 18px;
 }
 
 .stTextInput > div > div > input {
@@ -56,28 +56,33 @@ h2, h3 {
     border-radius: 20px;
     border: 3px solid #FFD166;
     margin-top: 20px;
+    color: black;
+    font-size: 18px;
 }
 
-.activity-box {
-    background-color: #D9F8FF;
-    padding: 20px;
-    border-radius: 20px;
-    margin-top: 20px;
+.footer {
+    text-align: center;
+    color: #5C3D99;
+    font-size: 18px;
+    margin-top: 40px;
 }
 
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------- API KEY ----------------
-# Reemplazar con tu key
+# ⚠️ Reemplaza con tu API KEY real
 client = OpenAI(api_key="TU_API_KEY")
 
 # ---------------- HEADER ----------------
 
-col1, col2 = st.columns([1,2])
+col1, col2 = st.columns([1, 2])
 
 with col1:
-    st.image("images/abrazador.png", width=250)  # reemplaza esta imagen
+
+    # Verifica si la imagen existe antes de mostrarla
+    if os.path.exists("images/Abrazador_Imagen1.png"):
+        st.image("images/Abrazador_Imagen1.png", width=300)
 
 with col2:
     st.title("🌈 AbraVenturas")
@@ -162,6 +167,8 @@ if st.button("✨ Crear mi AbraVentura"):
 
         Emoción actual: {emocion}
 
+        Tipo de actividad favorita: {tipo_actividad}
+
         Debe aparecer un personaje llamado "Abrazador"
         que acompaña emocionalmente al niño.
 
@@ -211,7 +218,7 @@ if st.button("✨ Crear mi AbraVentura"):
             unsafe_allow_html=True
         )
 
-        # ---------------- IMAGENES ----------------
+        # ---------------- GALERÍA VISUAL ----------------
 
         st.markdown("---")
         st.header("🌈 Inspiración visual")
@@ -219,20 +226,27 @@ if st.button("✨ Crear mi AbraVentura"):
         col3, col4, col5 = st.columns(3)
 
         with col3:
-            st.image("images/story1.png")  # reemplazar manualmente
+            if os.path.exists("images/Abrazador_Imagen1.png"):
+                st.image("images/Abrazador_Imagen1.png")
 
         with col4:
-            st.image("images/story2.png")
+            if os.path.exists("images/Abrazador_Imagen2.png"):
+                st.image("images/Abrazador_Imagen2.png")
 
         with col5:
-            st.image("images/story3.png")
+            if os.path.exists("images/Abrazador_Imagen3.png"):
+                st.image("images/Abrazador_Imagen3.png")
 
 # ---------------- FOOTER ----------------
 
 st.markdown("---")
+
 st.markdown(
     """
+    <div class="footer">
     💛 AbraVenturas busca transformar la lectura en un momento de conexión,
     imaginación y aprendizaje compartido.
-    """
+    </div>
+    """,
+    unsafe_allow_html=True
 )
