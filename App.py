@@ -4,6 +4,7 @@
 
 import streamlit as st
 import html as html_module
+import json
 import os
 import random
 
@@ -18,151 +19,123 @@ st.set_page_config(
 )
 
 # ---------------------------------------------------
-# HISTORIAS — 3 variantes por emoción
-# {nombre}, {animal}, {color}, {actividad}, {intereses}
+# HISTORIAS — 3 variantes por emoción, coherentes
+# Plantillas: {nombre}, {animal}, {color}, {actividad}, {intereses}
 # ---------------------------------------------------
 
 historias = {
 
     "Ansioso": [
-        """
-{nombre} sentía muchas maripositas en la barriga antes de dormir.
-Entonces apareció Abrazador con una linterna mágica color {color}.
-
-—Las emociones no son monstruos —dijo Abrazador—,
-son mensajes que quieren abrazos.
-
-Juntos caminaron por un bosque brillante donde un {animal} mágico
-les enseñó a respirar despacio.
-
-Al final, {nombre} respiró profundo y descubrió que podía
-sentirse valiente incluso cuando tenía miedo. 💛
-        """,
-        """
-Una noche, {nombre} no podía dormir.
-Su corazón latía muy rápido pensando en el día siguiente.
-
-Abrazador apareció montado en un {animal} brillante
-y le dijo: —Cada estrella del cielo es un abrazo esperándote.
-
-Juntos contaron estrellas hasta que {nombre}
-se quedó dormido sonriendo, soñando con {intereses}. ✨
-        """,
-        """
-{nombre} amaba {actividad}, pero a veces el miedo llegaba sin avisar.
-
-Abrazador llegó con un regalo especial: una piedrita color {color}.
-
-—Cuando sientas nervios, aprieta esta piedrita —dijo Abrazador—.
-Ella guardará toda tu valentía.
-
-Desde ese día, {nombre} supo que era más valiente de lo que creía. 🌟
-        """
+        (
+            "{nombre} sentía muchas maripositas en la barriga antes de dormir.\n"
+            "Entonces apareció Abrazador con una linterna mágica color {color}.\n\n"
+            "—Las emociones no son monstruos —dijo Abrazador—,\n"
+            "son mensajes que quieren abrazos.\n\n"
+            "Juntos caminaron por un bosque brillante donde un {animal} mágico\n"
+            "les enseñó a respirar despacio.\n\n"
+            "Al final, {nombre} respiró profundo y descubrió que podía\n"
+            "sentirse valiente incluso cuando tenía miedo. 💛"
+        ),
+        (
+            "Una noche, {nombre} no podía dormir.\n"
+            "Su corazón latía muy rápido pensando en el día siguiente.\n\n"
+            "Abrazador apareció montado en un {animal} brillante\n"
+            "y le dijo: —Cada estrella del cielo es un abrazo esperándote.\n\n"
+            "Juntos contaron estrellas de color {color}\n"
+            "hasta que {nombre} se quedó dormido sonriendo,\n"
+            "soñando con {intereses}. ✨"
+        ),
+        (
+            "{nombre} amaba {actividad}, pero a veces el miedo llegaba sin avisar.\n\n"
+            "Abrazador llegó una tarde con un regalo especial:\n"
+            "una piedrita mágica color {color}.\n\n"
+            "—Cuando sientas nervios, apriétala fuerte —dijo Abrazador—.\n"
+            "Ella guardará toda tu valentía.\n\n"
+            "Desde ese día, {nombre} supo que era más valiente de lo que creía. 🌟"
+        ),
     ],
 
     "Feliz": [
-        """
-{nombre} despertó lleno de energía y sonrisas.
-Abrazador llegó saltando entre estrellas color {color}.
-
-Juntos construyeron una ciudad de almohadas,
-dibujos y canciones mágicas con un {animal} bailarín.
-
-Cada risa hacía aparecer nuevas luces en el cielo.
-
-Antes de dormir, {nombre} entendió que compartir su alegría
-hacía felices a los demás también. ✨
-        """,
-        """
-Hoy era un día especial para {nombre}.
-
-Todo lo que tocaba se volvía magia: los colores brillaban más,
-los sonidos eran música y hasta su {animal} favorito parecía bailar.
-
-Abrazador le susurró: —La felicidad que sientes es un regalo,
-compártela con alguien hoy.
-
-Y {nombre} lo hizo, disfrutando de {actividad} con sus amigos. 🌈
-        """,
-        """
-{nombre} descubrió algo increíble mientras hacía {actividad}:
-que cuando uno está feliz, todo parece más fácil.
-
-Abrazador apareció con un {animal} de color {color}
-y juntos exploraron un mundo lleno de {intereses}.
-
-Al final del día, {nombre} guardó ese momento en su corazón
-como un tesoro para siempre. 💛
-        """
+        (
+            "{nombre} despertó lleno de energía y sonrisas.\n"
+            "Abrazador llegó saltando entre estrellas color {color}.\n\n"
+            "Juntos construyeron una ciudad de almohadas\n"
+            "con la ayuda de un {animal} muy juguetón.\n\n"
+            "Cada risa hacía aparecer nuevas luces en el cielo.\n\n"
+            "Antes de dormir, {nombre} entendió que compartir su alegría\n"
+            "hace felices a los demás también. ✨"
+        ),
+        (
+            "Hoy {nombre} se despertó cantando.\n"
+            "Todo brillaba más: el sol, los colores y hasta su {animal} favorito.\n\n"
+            "Abrazador llegó con una mochila llena de {intereses}\n"
+            "y juntos pasaron el día disfrutando de {actividad}.\n\n"
+            "Al caer la tarde, {nombre} guardó ese momento en su corazón\n"
+            "como el más bonito del año. 🌈"
+        ),
+        (
+            "{nombre} descubrió algo increíble mientras hacía {actividad}:\n"
+            "que cuando uno está feliz, todo parece más fácil.\n\n"
+            "Abrazador apareció con un {animal} color {color}\n"
+            "y juntos exploraron un mundo lleno de {intereses}.\n\n"
+            "Al final del día, {nombre} supo que la felicidad\n"
+            "es el mejor superpoder del mundo. 💛"
+        ),
     ],
 
     "Tímido": [
-        """
-{nombre} quería jugar,
-pero las palabras se escondían dentro de él.
-
-Entonces Abrazador le regaló una pequeña estrella color {color}.
-
-Cada vez que {nombre} sonreía,
-la estrella brillaba más fuerte.
-
-Poco a poco comenzó a hablar, jugar con su {animal} favorito
-y descubrir que ser tímido también puede ser hermoso. 🌈
-        """,
-        """
-En el jardín de {nombre} había un lugar secreto
-donde solo iba cuando quería estar solo.
-
-Un día, Abrazador llegó con un {animal} muy curioso
-que amaba {intereses} igual que {nombre}.
-
-—No necesitas hablar mucho para conectar —dijo Abrazador—.
-A veces una sonrisa lo dice todo. 💛
-        """,
-        """
-{nombre} era experto en {actividad}, pero nunca lo mostraba.
-
-Abrazador llegó una tarde con pintura color {color}
-y le dijo: —Tu forma de ver el mundo es única.
-
-Ese día, {nombre} mostró su talento por primera vez
-y descubrió que había personas que lo admiraban mucho. ✨
-        """
+        (
+            "{nombre} quería jugar,\n"
+            "pero las palabras se escondían dentro de él.\n\n"
+            "Entonces Abrazador le regaló una pequeña estrella color {color}.\n\n"
+            "Cada vez que {nombre} sonreía,\n"
+            "la estrella brillaba más fuerte.\n\n"
+            "Poco a poco comenzó a hablar y a jugar con un {animal} muy amigable,\n"
+            "descubriendo que ser tímido también puede ser hermoso. 🌈"
+        ),
+        (
+            "{nombre} era experto en {actividad}, pero nunca lo mostraba.\n\n"
+            "Un día, Abrazador llegó con pinturas color {color}\n"
+            "y le dijo: —Tu forma de ver el mundo es única y especial.\n\n"
+            "Ese día, {nombre} mostró su talento por primera vez\n"
+            "y descubrió que había muchas personas que lo admiraban. ✨"
+        ),
+        (
+            "En el mundo de {nombre} había cosas que amaba en silencio:\n"
+            "{intereses} y pasar horas haciendo {actividad}.\n\n"
+            "Un día, un {animal} muy curioso se sentó a su lado\n"
+            "y Abrazador susurró: —No necesitas muchas palabras\n"
+            "para conectar con alguien, {nombre}.\n\n"
+            "A veces una sonrisa lo dice todo. 💛"
+        ),
     ],
 
     "Curioso": [
-        """
-{nombre} tenía mil preguntas en su cabeza.
-
-Abrazador lo llevó a un planeta lleno de {intereses},
-animales parlantes como su {animal} favorito y puertas secretas.
-
-Allí descubrió que hacer preguntas
-era una forma mágica de explorar el mundo.
-
-Desde ese día, {nombre} nunca dejó de imaginar aventuras nuevas. 🚀
-        """,
-        """
-Un día, {nombre} encontró una puerta color {color}
-que nadie más podía ver.
-
-Abrazador estaba del otro lado con un mapa lleno de {intereses}.
-
-Juntos viajaron por mundos donde {actividad} era la llave
-para abrir todos los secretos del universo.
-
-{nombre} regresó a casa con el corazón lleno de maravillas. 🌟
-        """,
-        """
-{nombre} siempre se preguntaba cómo funcionaban las cosas.
-
-Un {animal} muy sabio y amigo de Abrazador
-le enseñó que cada pregunta es una aventura nueva.
-
-Juntos exploraron montañas de {intereses}
-y {nombre} aprendió que la curiosidad es el superpoder más grande. 💛
-        """
-    ]
+        (
+            "{nombre} tenía mil preguntas en su cabeza.\n\n"
+            "Abrazador lo llevó a un planeta lleno de {intereses},\n"
+            "con puertas secretas y un {animal} que hablaba.\n\n"
+            "Allí {nombre} descubrió que hacer preguntas\n"
+            "es la forma más mágica de explorar el mundo.\n\n"
+            "Desde ese día, nunca dejó de imaginar aventuras nuevas. 🚀"
+        ),
+        (
+            "Un día, {nombre} encontró una puerta color {color}\n"
+            "que nadie más podía ver.\n\n"
+            "Abrazador estaba del otro lado con un mapa lleno de {intereses}.\n\n"
+            "Juntos descubrieron que {actividad} era la llave\n"
+            "para abrir todos los secretos del universo.\n\n"
+            "{nombre} regresó a casa con el corazón lleno de maravillas. 🌟"
+        ),
+        (
+            "{nombre} siempre se preguntaba cómo funcionaban las cosas.\n\n"
+            "Un {animal} muy sabio, amigo de Abrazador,\n"
+            "le enseñó que cada pregunta abre una puerta nueva.\n\n"
+            "Juntos exploraron montañas de {intereses}\n"
+            "y {nombre} aprendió que la curiosidad\n"
+            "es el superpoder más grande de todos. 💛"
+        ),
+    ],
 
 }
 
@@ -180,66 +153,77 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background: linear-gradient(180deg, #FFF9F4 0%, #FFFDFB 100%);
+    background: #FFF9F4;
 }
 
 header { visibility: hidden; }
 footer { visibility: hidden; }
 
+/* ---------- BOLITAS FONDO ---------- */
 .bubbles {
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: -1;
+    z-index: 0;
     overflow: hidden;
     top: 0;
     left: 0;
+    pointer-events: none;
 }
 
 .bubble {
     position: absolute;
-    bottom: -150px;
+    bottom: -160px;
     border-radius: 50%;
-    opacity: 0.18;
-    animation: rise 22s infinite ease-in;
+    animation: rise linear infinite;
 }
 
-.b1 { width: 120px; height: 120px; left: 10%; background: #F7D66B; animation-duration: 20s; }
-.b2 { width: 90px;  height: 90px;  left: 30%; background: #A8DAD5; animation-duration: 17s; }
-.b3 { width: 140px; height: 140px; left: 55%; background: #F7C5E0; animation-duration: 24s; }
-.b4 { width: 100px; height: 100px; left: 75%; background: #C7E59B; animation-duration: 19s; }
-.b5 { width: 110px; height: 110px; left: 88%; background: #BFA2DB; animation-duration: 21s; }
+.b1  { width:80px;  height:80px;  left:5%;   background:#F7D66B; opacity:0.25; animation-duration:18s; animation-delay:0s;   }
+.b2  { width:50px;  height:50px;  left:15%;  background:#A8DAD5; opacity:0.30; animation-duration:14s; animation-delay:3s;   }
+.b3  { width:110px; height:110px; left:25%;  background:#F7C5E0; opacity:0.20; animation-duration:22s; animation-delay:1s;   }
+.b4  { width:65px;  height:65px;  left:38%;  background:#C7E59B; opacity:0.28; animation-duration:16s; animation-delay:5s;   }
+.b5  { width:90px;  height:90px;  left:50%;  background:#BFA2DB; opacity:0.22; animation-duration:20s; animation-delay:2s;   }
+.b6  { width:55px;  height:55px;  left:62%;  background:#F7D66B; opacity:0.30; animation-duration:15s; animation-delay:7s;   }
+.b7  { width:100px; height:100px; left:72%;  background:#A8DAD5; opacity:0.20; animation-duration:24s; animation-delay:0s;   }
+.b8  { width:70px;  height:70px;  left:82%;  background:#F7C5E0; opacity:0.26; animation-duration:17s; animation-delay:4s;   }
+.b9  { width:45px;  height:45px;  left:90%;  background:#C7E59B; opacity:0.32; animation-duration:13s; animation-delay:6s;   }
+.b10 { width:85px;  height:85px;  left:95%;  background:#BFA2DB; opacity:0.22; animation-duration:21s; animation-delay:9s;   }
 
 @keyframes rise {
-    0%   { transform: translateY(0px);     opacity: 0;    }
-    30%  {                                 opacity: 0.18; }
-    100% { transform: translateY(-1400px); opacity: 0;    }
+    0%   { transform: translateY(0)        scale(1);    opacity: 0;    }
+    10%  {                                              opacity: 0.28; }
+    90%  {                                              opacity: 0.20; }
+    100% { transform: translateY(-110vh)   scale(1.1); opacity: 0;    }
 }
 
+/* ---------- PORTADA ---------- */
 .portada-container img {
     border-radius: 0px 0px 40px 40px;
 }
 
+/* ---------- FORM CARD ---------- */
 .form-card {
-    background: rgba(255,255,255,0.82);
+    background: rgba(255,255,255,0.88);
     padding: 45px;
     border-radius: 40px;
-    box-shadow: 0px 10px 40px rgba(0,0,0,0.05);
-    backdrop-filter: blur(12px);
-    margin-top: -40px;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.06);
+    backdrop-filter: blur(14px);
+    position: relative;
+    z-index: 1;
 }
 
 .section-title {
-    font-size: 52px;
+    font-size: 48px;
     font-weight: 800;
     color: #0F766E;
     text-align: center;
+    margin-bottom: 8px;
 }
 
 .section-sub {
     color: #4A5759;
-    font-size: 22px;
-    margin-bottom: 35px;
+    font-size: 20px;
+    margin-bottom: 30px;
     text-align: center;
 }
 
@@ -275,7 +259,7 @@ label, p, span {
     color: white !important;
     border-radius: 22px !important;
     padding: 18px 30px !important;
-    font-size: 24px !important;
+    font-size: 22px !important;
     font-weight: 700 !important;
     border: none !important;
     width: 100%;
@@ -286,36 +270,43 @@ label, p, span {
     transform: scale(1.02);
 }
 
+/* ---------- STORY BOX ---------- */
 .story-box {
     background: white;
     border-radius: 35px;
-    padding: 45px;
-    margin-top: 35px;
+    padding: 45px 50px;
+    margin-top: 30px;
     border: 4px solid #F7D66B;
     box-shadow: 0px 8px 30px rgba(0,0,0,0.04);
+    position: relative;
+    z-index: 1;
 }
 
 .story-title {
     color: #0F766E;
-    font-size: 42px;
+    font-size: 36px;
     font-weight: 800;
-    margin-bottom: 25px;
+    margin-bottom: 28px;
     text-align: center;
 }
 
-.story-text {
+.story-paragraph {
     color: #374151;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1.9;
-    white-space: pre-line;
+    margin-bottom: 14px;
+    font-weight: 600;
 }
 
+/* ---------- FOOTER ---------- */
 .footer {
     text-align: center;
     margin-top: 60px;
     color: #52796F;
     font-size: 18px;
     padding-bottom: 30px;
+    position: relative;
+    z-index: 1;
 }
 
 </style>
@@ -326,6 +317,11 @@ label, p, span {
     <div class="bubble b3"></div>
     <div class="bubble b4"></div>
     <div class="bubble b5"></div>
+    <div class="bubble b6"></div>
+    <div class="bubble b7"></div>
+    <div class="bubble b8"></div>
+    <div class="bubble b9"></div>
+    <div class="bubble b10"></div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -376,149 +372,114 @@ st.markdown("</div>", unsafe_allow_html=True)
 st.markdown("<br>", unsafe_allow_html=True)
 
 if st.button("⭐ Crear mi AbraVentura"):
-
     if not nombre.strip():
         st.warning("¡Por favor escribe el nombre del niño! 👦")
-
     else:
-        # Elegir una variante aleatoria según emoción
         variantes = historias.get(emocion, historias["Feliz"])
         plantilla = random.choice(variantes)
 
         intereses_texto = ", ".join(intereses) if intereses else "aventuras mágicas"
 
-        # Rellenar plantilla con los datos del niño
-        historia_final = plantilla.format(
+        historia_generada = plantilla.format(
             nombre=nombre.strip(),
-            edad=edad,
             color=color_favorito.lower(),
             animal=animal_favorito.lower(),
             actividad=tipo_actividad.lower(),
             intereses=intereses_texto.lower()
         )
 
-        introduccion = (
-            f"Hola {nombre.strip()} 💛\n\n"
-            f"Hoy vivirás una aventura muy especial.\n\n"
-        )
+        introduccion = f"Hola {nombre.strip()} 💛\n\nHoy vivirás una aventura muy especial.\n\n"
+        texto_completo = introduccion + historia_generada.strip() + "\n\n🌈 Fin de la AbraVentura."
 
-        texto_completo = introduccion + historia_final.strip() + "\n\n🌈 Fin de la AbraVentura."
-
-        # Guardar en session_state para el audiolibro
-        st.session_state["historia_texto"] = texto_completo
+        st.session_state["historia_texto"]  = texto_completo
         st.session_state["historia_nombre"] = nombre.strip()
 
 # ---------------------------------------------------
-# MOSTRAR HISTORIA + AUDIOLIBRO
+# MOSTRAR HISTORIA
 # ---------------------------------------------------
 
 if "historia_texto" in st.session_state:
 
-    texto = st.session_state["historia_texto"]
-    nombre_nino = st.session_state["historia_nombre"]
+    texto        = st.session_state["historia_texto"]
+    nombre_nino  = st.session_state["historia_nombre"]
+    nombre_safe  = html_module.escape(nombre_nino)
 
-    # Mostrar historia en tarjeta limpia (solo texto, sin HTML)
-    st.markdown('<div class="story-box">', unsafe_allow_html=True)
-    st.markdown(f'<div class="story-title">📖 La AbraVentura de {html_module.escape(nombre_nino)}</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+    # --- Tarjeta única con título + párrafos ---
+    parrafos_html = ""
+    for linea in texto.split("\n"):
+        if linea.strip():
+            parrafos_html += f'<p class="story-paragraph">{html_module.escape(linea)}</p>\n'
 
-    # Usar st.write para el texto — sin riesgo de HTML injection
-    st.markdown('<div class="story-box">', unsafe_allow_html=True)
-    st.markdown(
-        f'<div class="story-title">📖 La AbraVentura de {html_module.escape(nombre_nino)}</div>',
-        unsafe_allow_html=True
-    )
-    # Texto con st.write para renderizado limpio
-    for parrafo in texto.split("\n"):
-        if parrafo.strip():
-            st.markdown(
-                f'<p class="story-text">{html_module.escape(parrafo)}</p>',
-                unsafe_allow_html=True
-            )
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown(f"""
+<div class="story-box">
+    <div class="story-title">📖 La AbraVentura de {nombre_safe}</div>
+    {parrafos_html}
+</div>
+""", unsafe_allow_html=True)
 
     # ---------------------------------------------------
-    # AUDIOLIBRO con Web Speech API
+    # AUDIOLIBRO
     # ---------------------------------------------------
 
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("### 🎧 Escuchar la historia")
 
-    # Pasar el texto al componente JS de forma segura
-    import json
     texto_js = json.dumps(texto)
 
     audio_html = f"""
     <div style="
         background: white;
         border-radius: 30px;
-        padding: 30px 40px;
+        padding: 28px 40px;
         border: 3px solid #A8DAD5;
         box-shadow: 0px 6px 20px rgba(0,0,0,0.05);
         text-align: center;
         font-family: 'Nunito', sans-serif;
+        position: relative;
+        z-index: 1;
     ">
-        <p style="font-size: 20px; color: #0F766E; font-weight: 700; margin-bottom: 20px;">
-            🔊 Audiolibro de {html_module.escape(nombre_nino)}
+        <p style="font-size:20px; color:#0F766E; font-weight:800; margin-bottom:18px;">
+            🎧 Escuchar la historia de {nombre_safe}
         </p>
 
-        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+        <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
 
             <button onclick="leerHistoria()" style="
-                background: linear-gradient(90deg, #56CFE1, #72DDF7);
-                color: white;
-                border: none;
-                border-radius: 20px;
-                padding: 14px 28px;
-                font-size: 18px;
-                font-weight: 700;
-                cursor: pointer;
-                font-family: 'Nunito', sans-serif;
+                background: linear-gradient(90deg,#56CFE1,#72DDF7);
+                color: white; border: none; border-radius: 20px;
+                padding: 12px 26px; font-size:17px; font-weight:700;
+                cursor: pointer; font-family:'Nunito',sans-serif;
             ">▶️ Reproducir</button>
 
             <button onclick="pausarHistoria()" style="
-                background: #F7D66B;
-                color: #374151;
-                border: none;
-                border-radius: 20px;
-                padding: 14px 28px;
-                font-size: 18px;
-                font-weight: 700;
-                cursor: pointer;
-                font-family: 'Nunito', sans-serif;
+                background: #F7D66B; color: #374151;
+                border: none; border-radius: 20px;
+                padding: 12px 26px; font-size:17px; font-weight:700;
+                cursor: pointer; font-family:'Nunito',sans-serif;
             ">⏸️ Pausar</button>
 
             <button onclick="detenerHistoria()" style="
-                background: #F7C5E0;
-                color: #374151;
-                border: none;
-                border-radius: 20px;
-                padding: 14px 28px;
-                font-size: 18px;
-                font-weight: 700;
-                cursor: pointer;
-                font-family: 'Nunito', sans-serif;
+                background: #F7C5E0; color: #374151;
+                border: none; border-radius: 20px;
+                padding: 12px 26px; font-size:17px; font-weight:700;
+                cursor: pointer; font-family:'Nunito',sans-serif;
             ">⏹️ Detener</button>
 
         </div>
 
         <p id="estado-audio" style="
-            margin-top: 18px;
-            font-size: 16px;
-            color: #52796F;
-            font-weight: 600;
-            min-height: 24px;
+            margin-top:16px; font-size:15px;
+            color:#52796F; font-weight:700; min-height:22px;
         "></p>
 
     </div>
 
     <script>
         const textoHistoria = {texto_js};
-        let utterance = null;
-        let sintetizador = window.speechSynthesis;
+        const sint = window.speechSynthesis;
+        let utt = null;
 
-        function obtenerVozEspanol() {{
-            const voces = sintetizador.getVoices();
+        function vozEspanol() {{
+            const voces = sint.getVoices();
             return (
                 voces.find(v => v.lang === 'es-CO') ||
                 voces.find(v => v.lang === 'es-MX') ||
@@ -528,57 +489,41 @@ if "historia_texto" in st.session_state:
         }}
 
         function leerHistoria() {{
-            if (sintetizador.speaking) {{
-                if (sintetizador.paused) {{
-                    sintetizador.resume();
-                    document.getElementById('estado-audio').innerText = '▶️ Reproduciendo...';
-                }}
+            if (sint.speaking) {{
+                if (sint.paused) {{ sint.resume(); estado('▶️ Reproduciendo...'); }}
                 return;
             }}
-
-            utterance = new SpeechSynthesisUtterance(textoHistoria);
-            utterance.rate = 0.88;
-            utterance.pitch = 1.1;
-            utterance.volume = 1;
-
-            const voz = obtenerVozEspanol();
-            if (voz) utterance.voice = voz;
-
-            utterance.onstart = () => {{
-                document.getElementById('estado-audio').innerText = '▶️ Reproduciendo...';
-            }};
-
-            utterance.onend = () => {{
-                document.getElementById('estado-audio').innerText = '✅ Historia terminada 💛';
-            }};
-
-            utterance.onerror = (e) => {{
-                document.getElementById('estado-audio').innerText = '⚠️ Error al reproducir';
-            }};
-
-            sintetizador.speak(utterance);
+            utt = new SpeechSynthesisUtterance(textoHistoria);
+            utt.rate   = 0.88;
+            utt.pitch  = 1.1;
+            utt.volume = 1;
+            const v = vozEspanol();
+            if (v) utt.voice = v;
+            utt.onstart = () => estado('▶️ Reproduciendo...');
+            utt.onend   = () => estado('✅ Historia terminada 💛');
+            utt.onerror = () => estado('⚠️ Error al reproducir');
+            sint.speak(utt);
         }}
 
         function pausarHistoria() {{
-            if (sintetizador.speaking && !sintetizador.paused) {{
-                sintetizador.pause();
-                document.getElementById('estado-audio').innerText = '⏸️ Pausado';
-            }}
+            if (sint.speaking && !sint.paused) {{ sint.pause(); estado('⏸️ Pausado'); }}
         }}
 
         function detenerHistoria() {{
-            sintetizador.cancel();
-            document.getElementById('estado-audio').innerText = '⏹️ Detenido';
+            sint.cancel(); estado('⏹️ Detenido');
         }}
 
-        // Cargar voces (necesario en algunos navegadores)
-        if (sintetizador.onvoiceschanged !== undefined) {{
-            sintetizador.onvoiceschanged = obtenerVozEspanol;
+        function estado(msg) {{
+            document.getElementById('estado-audio').innerText = msg;
+        }}
+
+        if (sint.onvoiceschanged !== undefined) {{
+            sint.onvoiceschanged = vozEspanol;
         }}
     </script>
     """
 
-    st.components.v1.html(audio_html, height=220)
+    st.components.v1.html(audio_html, height=200)
 
 # ---------------------------------------------------
 # FOOTER
