@@ -3,7 +3,7 @@
 # Hugger Island inspired UI
 
 import streamlit as st
-from PIL import Image
+import html as html_module
 import os
 import random
 
@@ -436,8 +436,7 @@ if os.path.exists("portada.png"):
         unsafe_allow_html=True
     )
 
-st.write("")
-st.write("")
+st.markdown("<br>", unsafe_allow_html=True)
 
 # ---------------------------------------------------
 # FORM
@@ -542,41 +541,51 @@ st.markdown("</div>", unsafe_allow_html=True)
 # GENERAR HISTORIA
 # ---------------------------------------------------
 
-st.write("")
-st.write("")
+st.markdown("<br>", unsafe_allow_html=True)
 
 if st.button("⭐ Crear mi AbraVentura"):
 
-    historia_base = next(
-        (
-            h["historia"]
-            for h in historias
-            if h["emocion"] == emocion
-        ),
-        random.choice(historias)["historia"]
-    )
+    if not nombre.strip():
+        st.warning("¡Por favor escribe el nombre del niño! 👦")
 
-    intereses_texto = ", ".join(intereses) if intereses else "aventuras mágicas"
+    else:
 
-    historia_final = f"""
-Hola {nombre} 💛
+        # Buscar historia por emoción, con fallback seguro
+        historia_encontrada = next(
+            (h for h in historias if h["emocion"] == emocion),
+            random.choice(historias)
+        )
+        historia_base = historia_encontrada["historia"]
+
+        # Escapar entradas del usuario para evitar HTML injection
+        nombre_safe = html_module.escape(nombre.strip())
+        intereses_texto = html_module.escape(
+            ", ".join(intereses) if intereses else "aventuras mágicas"
+        )
+        edad_safe = html_module.escape(edad)
+        color_safe = html_module.escape(color_favorito)
+        animal_safe = html_module.escape(animal_favorito)
+        actividad_safe = html_module.escape(tipo_actividad.lower())
+
+        historia_final = f"""
+Hola {nombre_safe} 💛
 
 Hoy vivirás una aventura muy especial.
 
-Tienes {edad},
-tu color favorito es {color_favorito}
-y tu animal favorito es {animal_favorito}.
+Tienes {edad_safe},
+tu color favorito es {color_safe}
+y tu animal favorito es {animal_safe}.
 
 También amas {intereses_texto}
-y disfrutas mucho {tipo_actividad.lower()}.
+y disfrutas mucho {actividad_safe}.
 
 {historia_base}
 
 🌈 Fin de la AbraVentura.
 """
 
-    st.markdown(
-        f"""
+        st.markdown(
+            f"""
 <div class="story-box">
 
     <div class="story-title">
@@ -589,8 +598,8 @@ y disfrutas mucho {tipo_actividad.lower()}.
 
 </div>
 """,
-        unsafe_allow_html=True
-    )
+            unsafe_allow_html=True
+        )
 
 # ---------------------------------------------------
 # FOOTER
@@ -601,4 +610,3 @@ st.markdown("""
 💛 Hugger Island • Abraza • Conecta • Transforma
 </div>
 """, unsafe_allow_html=True)
-
