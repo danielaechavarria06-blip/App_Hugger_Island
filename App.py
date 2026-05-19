@@ -103,6 +103,10 @@ html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif;
 }
 
+/* ------------------------------------------------ */
+/* FONDO */
+/* ------------------------------------------------ */
+
 .stApp {
     background: linear-gradient(
         180deg,
@@ -111,7 +115,9 @@ html, body, [class*="css"] {
     );
 }
 
+/* ------------------------------------------------ */
 /* OCULTAR STREAMLIT */
+/* ------------------------------------------------ */
 
 header {
     visibility: hidden;
@@ -121,7 +127,9 @@ footer {
     visibility: hidden;
 }
 
-/* ---------------- BUBBLES ---------------- */
+/* ------------------------------------------------ */
+/* BURBUJAS */
+/* ------------------------------------------------ */
 
 .bubbles {
     position: fixed;
@@ -135,10 +143,10 @@ footer {
 
 .bubble {
     position: absolute;
-    bottom: -120px;
+    bottom: -150px;
     border-radius: 50%;
-    opacity: 0.20;
-    animation: rise 18s infinite ease-in;
+    opacity: 0.18;
+    animation: rise 22s infinite ease-in;
 }
 
 .b1 {
@@ -150,11 +158,11 @@ footer {
 }
 
 .b2 {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     left: 30%;
     background: #A8DAD5;
-    animation-duration: 16s;
+    animation-duration: 17s;
 }
 
 .b3 {
@@ -166,171 +174,232 @@ footer {
 }
 
 .b4 {
-    width: 90px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
     left: 75%;
     background: #C7E59B;
-    animation-duration: 17s;
+    animation-duration: 19s;
 }
 
 .b5 {
-    width: 100px;
-    height: 100px;
+    width: 110px;
+    height: 110px;
     left: 88%;
     background: #BFA2DB;
     animation-duration: 21s;
 }
 
 @keyframes rise {
+
     0% {
         transform: translateY(0px);
         opacity: 0;
     }
 
     30% {
-        opacity: 0.25;
+        opacity: 0.18;
     }
 
     100% {
-        transform: translateY(-1200px);
+        transform: translateY(-1400px);
         opacity: 0;
     }
+
 }
 
-/* ---------------- PORTADA ---------------- */
+/* ------------------------------------------------ */
+/* PORTADA */
+/* ------------------------------------------------ */
 
 .portada-container img {
     border-radius: 0px 0px 40px 40px;
 }
 
-/* ---------------- FORM ---------------- */
+/* ------------------------------------------------ */
+/* FORM CARD */
+/* ------------------------------------------------ */
 
 .form-card {
+
     background: rgba(255,255,255,0.82);
     padding: 45px;
     border-radius: 40px;
-    box-shadow: 0px 8px 35px rgba(0,0,0,0.05);
+
+    box-shadow:
+        0px 10px 40px rgba(0,0,0,0.05);
+
     backdrop-filter: blur(12px);
+
     margin-top: -40px;
 }
 
-/* ---------------- TITULOS ---------------- */
+/* ------------------------------------------------ */
+/* TITULOS */
+/* ------------------------------------------------ */
 
 .section-title {
+
     font-size: 52px;
     font-weight: 800;
     color: #0F766E;
-    text-align:center;
+
+    text-align: center;
 }
 
 .section-sub {
-    color: #52796F;
+
+    color: #4A5759;
     font-size: 22px;
+
     margin-bottom: 35px;
-    text-align:center;
+
+    text-align: center;
 }
 
-/* ---------------- LABELS ---------------- */
+/* ------------------------------------------------ */
+/* LABELS */
+/* ------------------------------------------------ */
 
-label, .stMarkdown, p {
-    color: #355070 !important;
+label,
+p,
+span {
+
+    color: #1F2937 !important;
     font-weight: 700 !important;
-    font-size: 18px !important;
 }
 
-/* ---------------- INPUTS ---------------- */
+/* ------------------------------------------------ */
+/* INPUTS */
+/* ------------------------------------------------ */
 
 .stTextInput input {
+
+    background: #DFF4FF !important;
+    color: #1F2937 !important;
+
     border-radius: 18px !important;
-    background: #DFF6FF !important;
-    color: #355070 !important;
-    border: 2px solid #BEE9F7 !important;
-    font-size: 18px !important;
+    border: none !important;
+
+    padding: 12px !important;
 }
 
-/* ---------------- SELECTBOX ---------------- */
+/* ------------------------------------------------ */
+/* SELECTBOX */
+/* ------------------------------------------------ */
 
-.stSelectbox div[data-baseweb="select"] {
-    background: #DFF6FF !important;
+.stSelectbox div[data-baseweb="select"] > div {
+
+    background: #DFF4FF !important;
+    color: #1F2937 !important;
+
     border-radius: 18px !important;
-    border: 2px solid #BEE9F7 !important;
-    color: #355070 !important;
+    border: none !important;
 }
 
-.stSelectbox span {
-    color: #355070 !important;
-    font-weight: 700 !important;
-}
+/* ------------------------------------------------ */
+/* MULTISELECT */
+/* ------------------------------------------------ */
 
-/* ---------------- MULTISELECT ---------------- */
+.stMultiSelect div[data-baseweb="select"] > div {
 
-.stMultiSelect div[data-baseweb="select"] {
-    background: #DFF6FF !important;
+    background: #DFF4FF !important;
+    color: #1F2937 !important;
+
     border-radius: 18px !important;
-    border: 2px solid #BEE9F7 !important;
+    border: none !important;
 }
 
-.stMultiSelect span {
-    color: #355070 !important;
-    font-weight: 700 !important;
-}
-
-/* ---------------- BUTTON ---------------- */
+/* ------------------------------------------------ */
+/* BOTON */
+/* ------------------------------------------------ */
 
 .stButton button {
+
     background: linear-gradient(
         90deg,
-        #0F766E,
-        #1D9A8C
+        #56CFE1,
+        #72DDF7
     ) !important;
 
     color: white !important;
+
     border-radius: 22px !important;
+
     padding: 18px 30px !important;
+
     font-size: 24px !important;
     font-weight: 700 !important;
+
     border: none !important;
+
     width: 100%;
+
     transition: 0.3s;
 }
 
 .stButton button:hover {
+
     transform: scale(1.02);
 }
 
-/* ---------------- STORY ---------------- */
+/* ------------------------------------------------ */
+/* STORY */
+/* ------------------------------------------------ */
 
 .story-box {
-    background: white !important;
+
+    background: white;
+
     border-radius: 35px;
+
     padding: 45px;
+
     margin-top: 35px;
+
     border: 4px solid #F7D66B;
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.04);
+
+    box-shadow:
+        0px 8px 30px rgba(0,0,0,0.04);
 }
 
 .story-title {
-    color: #0F766E !important;
+
+    color: #0F766E;
+
     font-size: 42px;
+
     font-weight: 800;
+
     margin-bottom: 25px;
-    text-align:center;
+
+    text-align: center;
 }
 
 .story-text {
-    color: #355070 !important;
+
+    color: #374151;
+
     font-size: 24px;
+
     line-height: 1.9;
+
     white-space: pre-line;
 }
 
-/* ---------------- FOOTER ---------------- */
+/* ------------------------------------------------ */
+/* FOOTER */
+/* ------------------------------------------------ */
 
 .footer {
+
     text-align: center;
+
     margin-top: 60px;
+
     color: #52796F;
+
     font-size: 18px;
+
     padding-bottom: 30px;
 }
 
@@ -351,9 +420,21 @@ label, .stMarkdown, p {
 # ---------------------------------------------------
 
 if os.path.exists("portada.png"):
-    st.markdown('<div class="portada-container">', unsafe_allow_html=True)
-    st.image("portada.png", use_container_width=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        '<div class="portada-container">',
+        unsafe_allow_html=True
+    )
+
+    st.image(
+        "portada.png",
+        use_container_width=True
+    )
+
+    st.markdown(
+        '</div>',
+        unsafe_allow_html=True
+    )
 
 st.write("")
 st.write("")
@@ -364,6 +445,7 @@ st.write("")
 
 st.markdown("""
 <div class="form-card">
+
 <div class="section-title">
 ✨ Personalicemos la aventura
 </div>
@@ -371,34 +453,52 @@ st.markdown("""
 <div class="section-sub">
 Cuéntanos un poco sobre tu pequeño lector 💛
 </div>
+
 """, unsafe_allow_html=True)
 
 c1, c2 = st.columns(2)
 
 with c1:
 
-    nombre = st.text_input("👦 Nombre del niño")
+    nombre = st.text_input(
+        "👦 Nombre del niño"
+    )
 
     edad = st.selectbox(
         "🎂 Edad",
-        ["3 años", "4 años", "5 años", "6 años", "7 años", "8 años"]
+        [
+            "3 años",
+            "4 años",
+            "5 años",
+            "6 años",
+            "7 años",
+            "8 años"
+        ]
     )
 
     color_favorito = st.selectbox(
         "🎨 Color favorito",
-        ["Amarillo", "Azul", "Verde", "Rosado", "Morado", "Naranja"]
+        [
+            "Amarillo",
+            "Azul",
+            "Verde",
+            "Rosado",
+            "Morado",
+            "Naranja"
+        ]
     )
 
     animal_favorito = st.selectbox(
-        "🦊 Animal favorito",
+        "🐻 Animal favorito",
         [
             "Perro",
             "Gato",
             "Conejo",
-            "Dinosaurio",
-            "Panda",
+            "Delfín",
             "León",
-            "Delfín"
+            "Panda",
+            "Tortuga",
+            "Dragón"
         ]
     )
 
@@ -439,7 +539,7 @@ intereses = st.multiselect(
 st.markdown("</div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------
-# GENERAR
+# GENERAR HISTORIA
 # ---------------------------------------------------
 
 st.write("")
@@ -456,38 +556,41 @@ if st.button("⭐ Crear mi AbraVentura"):
         random.choice(historias)["historia"]
     )
 
+    intereses_texto = ", ".join(intereses) if intereses else "aventuras mágicas"
+
     historia_final = f"""
 Hola {nombre} 💛
 
-Hoy vivirás una aventura especial.
+Hoy vivirás una aventura muy especial.
 
 Tienes {edad},
 tu color favorito es {color_favorito}
 y tu animal favorito es {animal_favorito}.
 
-También amas
-{", ".join(intereses) if intereses else "imaginar aventuras mágicas"}.
-
-Disfrutas mucho {tipo_actividad.lower()}.
+También amas {intereses_texto}
+y disfrutas mucho {tipo_actividad.lower()}.
 
 {historia_base}
 
 🌈 Fin de la AbraVentura.
 """
 
-    st.markdown(f"""
-    <div class="story-box">
+    st.markdown(
+        f"""
+<div class="story-box">
 
-        <div class="story-title">
+    <div class="story-title">
         📖 Tu AbraVentura
-        </div>
-
-        <div class="story-text">
-        {historia_final.replace('\\n', '<br>')}
-        </div>
-
     </div>
-    """, unsafe_allow_html=True)
+
+    <div class="story-text">
+        {historia_final}
+    </div>
+
+</div>
+""",
+        unsafe_allow_html=True
+    )
 
 # ---------------------------------------------------
 # FOOTER
@@ -498,3 +601,4 @@ st.markdown("""
 💛 Hugger Island • Abraza • Conecta • Transforma
 </div>
 """, unsafe_allow_html=True)
+
