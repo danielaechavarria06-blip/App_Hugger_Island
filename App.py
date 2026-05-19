@@ -1,3 +1,99 @@
+# app.py
+# AbraVenturas ✨
+# Hugger Island inspired UI
+
+import streamlit as st
+from PIL import Image
+import os
+import random
+
+# ---------------------------------------------------
+# CONFIG
+# ---------------------------------------------------
+
+st.set_page_config(
+    page_title="AbraVenturas",
+    page_icon="💛",
+    layout="wide"
+)
+
+# ---------------------------------------------------
+# HISTORIAS PREDEFINIDAS
+# ---------------------------------------------------
+
+historias = [
+
+    {
+        "emocion": "Ansioso",
+        "historia": """
+        Manuel sentía muchas maripositas en la barriga antes de dormir.
+        Entonces apareció Abrazador con una linterna mágica color verde.
+
+        —Las emociones no son monstruos —dijo Abrazador—,
+        son mensajes que quieren abrazos.
+
+        Juntos caminaron por un bosque brillante donde cada árbol
+        contaba una historia tranquila.
+
+        Al final, Manuel respiró profundo y descubrió que podía
+        sentirse valiente incluso cuando tenía miedo. 💛
+        """
+    },
+
+    {
+        "emocion": "Feliz",
+        "historia": """
+        Sofía despertó llena de energía y sonrisas.
+        Abrazador llegó saltando entre estrellas amarillas.
+
+        Juntos construyeron una ciudad de almohadas,
+        dibujos y canciones mágicas.
+
+        Cada risa hacía aparecer nuevas luces en el cielo.
+
+        Antes de dormir, Sofía entendió que compartir su alegría
+        hacía felices a los demás también. ✨
+        """
+    },
+
+    {
+        "emocion": "Tímido",
+        "historia": """
+        Lucas quería jugar,
+        pero las palabras se escondían dentro de él.
+
+        Entonces Abrazador le regaló una pequeña estrella morada.
+
+        Cada vez que Lucas sonreía,
+        la estrella brillaba más fuerte.
+
+        Poco a poco comenzó a hablar,
+        jugar y descubrir que ser tímido también puede ser hermoso. 🌈
+        """
+    },
+
+    {
+        "emocion": "Curioso",
+        "historia": """
+        Valentina tenía mil preguntas en su cabeza.
+
+        Abrazador la llevó a un planeta lleno de libros flotantes,
+        animales parlantes y puertas secretas.
+
+        Allí descubrió que hacer preguntas
+        era una forma mágica de explorar el mundo.
+
+        Desde ese día,
+        nunca dejó de imaginar aventuras nuevas. 🚀
+        """
+    }
+
+]
+
+# ---------------------------------------------------
+# CSS WOW ✨
+# ---------------------------------------------------
+
 st.markdown("""
 <style>
 
@@ -7,7 +103,10 @@ html, body, [class*="css"] {
     font-family: 'Nunito', sans-serif;
 }
 
-/* FONDO GENERAL */
+/* ------------------------------------------------ */
+/* FONDO */
+/* ------------------------------------------------ */
+
 .stApp {
     background: linear-gradient(
         180deg,
@@ -17,7 +116,19 @@ html, body, [class*="css"] {
 }
 
 /* ------------------------------------------------ */
-/* BURBUJAS FLOTANTES */
+/* OCULTAR HEADER STREAMLIT */
+/* ------------------------------------------------ */
+
+header {
+    visibility: hidden;
+}
+
+footer {
+    visibility: hidden;
+}
+
+/* ------------------------------------------------ */
+/* BURBUJAS */
 /* ------------------------------------------------ */
 
 .bubbles {
@@ -32,10 +143,10 @@ html, body, [class*="css"] {
 
 .bubble {
     position: absolute;
-    bottom: -120px;
+    bottom: -150px;
     border-radius: 50%;
     opacity: 0.18;
-    animation: rise 20s infinite ease-in;
+    animation: rise 22s infinite ease-in;
 }
 
 .b1 {
@@ -47,27 +158,27 @@ html, body, [class*="css"] {
 }
 
 .b2 {
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     left: 30%;
     background: #BDE0FE;
-    animation-duration: 16s;
+    animation-duration: 18s;
 }
 
 .b3 {
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     left: 55%;
     background: #FFC8DD;
     animation-duration: 24s;
 }
 
 .b4 {
-    width: 90px;
-    height: 90px;
+    width: 110px;
+    height: 110px;
     left: 75%;
     background: #CDEAC0;
-    animation-duration: 17s;
+    animation-duration: 19s;
 }
 
 .b5 {
@@ -79,6 +190,7 @@ html, body, [class*="css"] {
 }
 
 @keyframes rise {
+
     0% {
         transform: translateY(0px);
         opacity: 0;
@@ -89,61 +201,48 @@ html, body, [class*="css"] {
     }
 
     100% {
-        transform: translateY(-1200px);
+        transform: translateY(-1300px);
         opacity: 0;
     }
 }
 
 /* ------------------------------------------------ */
-/* HERO */
+/* PORTADA */
 /* ------------------------------------------------ */
 
-.hero {
-    background: rgba(255,255,255,0.75);
-    border-radius: 35px;
-    padding: 30px;
-    backdrop-filter: blur(12px);
-    box-shadow: 0px 10px 40px rgba(0,0,0,0.05);
-    margin-bottom: 30px;
-}
-
-.hero-title {
-    font-size: 64px;
-    font-weight: 800;
-    color: #0F766E;
-    line-height: 1;
-}
-
-.hero-sub {
-    font-size: 28px;
-    color: #52796F;
-    margin-top: 10px;
+.portada-container img {
+    border-radius: 0px 0px 40px 40px;
 }
 
 /* ------------------------------------------------ */
-/* FORMULARIO */
+/* FORM */
 /* ------------------------------------------------ */
 
 .form-card {
     background: rgba(255,255,255,0.82);
-    padding: 35px;
-    border-radius: 35px;
+    padding: 45px;
+    border-radius: 40px;
     box-shadow: 0px 8px 35px rgba(0,0,0,0.05);
     backdrop-filter: blur(12px);
+    margin-top: -40px;
 }
 
+/* ------------------------------------------------ */
 /* TITULOS */
+/* ------------------------------------------------ */
 
 .section-title {
-    font-size: 42px;
+    font-size: 52px;
     font-weight: 800;
     color: #0F766E;
+    text-align:center;
 }
 
 .section-sub {
     color: #52796F;
-    font-size: 20px;
-    margin-bottom: 30px;
+    font-size: 22px;
+    margin-bottom: 35px;
+    text-align:center;
 }
 
 /* ------------------------------------------------ */
@@ -151,12 +250,12 @@ html, body, [class*="css"] {
 /* ------------------------------------------------ */
 
 label,
+.stTextInput label,
 .stSelectbox label,
-.stMultiSelect label,
-.stTextInput label {
-    color: #0F766E !important;
-    font-weight: 700 !important;
+.stMultiSelect label {
+    color: #0F172A !important;
     font-size: 18px !important;
+    font-weight: 700 !important;
 }
 
 /* ------------------------------------------------ */
@@ -164,7 +263,7 @@ label,
 /* ------------------------------------------------ */
 
 .stTextInput input {
-    background-color: #EAF6FF !important;
+    background-color: #DFF4FF !important;
     color: #0F172A !important;
     border-radius: 18px !important;
     border: 2px solid #BDE0FE !important;
@@ -172,28 +271,29 @@ label,
 }
 
 .stSelectbox div[data-baseweb="select"] {
-    background-color: #EAF6FF !important;
+    background-color: #DFF4FF !important;
     border-radius: 18px !important;
     border: 2px solid #BDE0FE !important;
 }
 
 .stMultiSelect div[data-baseweb="select"] {
-    background-color: #EAF6FF !important;
+    background-color: #DFF4FF !important;
     border-radius: 18px !important;
     border: 2px solid #BDE0FE !important;
 }
 
-/* TEXTO DENTRO INPUTS */
+/* TEXTO INPUT */
 
 input, textarea {
     color: #0F172A !important;
 }
 
 /* ------------------------------------------------ */
-/* BOTÓN */
+/* BOTON */
 /* ------------------------------------------------ */
 
 .stButton button {
+
     background: linear-gradient(
         90deg,
         #5EC8FF,
@@ -201,9 +301,9 @@ input, textarea {
     ) !important;
 
     color: white !important;
-    border-radius: 20px !important;
+    border-radius: 22px !important;
     padding: 18px 30px !important;
-    font-size: 22px !important;
+    font-size: 24px !important;
     font-weight: 700 !important;
     border: none !important;
     width: 100%;
@@ -215,29 +315,30 @@ input, textarea {
 }
 
 /* ------------------------------------------------ */
-/* STORY BOX */
+/* STORY */
 /* ------------------------------------------------ */
 
 .story-box {
     background: white;
-    border-radius: 30px;
-    padding: 40px;
-    margin-top: 30px;
+    border-radius: 35px;
+    padding: 45px;
+    margin-top: 35px;
     border: 4px solid #FFD166;
     box-shadow: 0px 8px 30px rgba(0,0,0,0.04);
 }
 
 .story-title {
     color: #0F766E;
-    font-size: 38px;
+    font-size: 42px;
     font-weight: 800;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    text-align:center;
 }
 
 .story-text {
     color: #4A5759;
-    font-size: 22px;
-    line-height: 1.8;
+    font-size: 24px;
+    line-height: 1.9;
 }
 
 /* ------------------------------------------------ */
@@ -264,3 +365,149 @@ input, textarea {
 
 """, unsafe_allow_html=True)
 
+# ---------------------------------------------------
+# PORTADA
+# ---------------------------------------------------
+
+if os.path.exists("portada.png"):
+    st.markdown('<div class="portada-container">', unsafe_allow_html=True)
+    st.image("portada.png", use_container_width=True)
+    st.markdown('</div>', unsafe_allow_html=True)
+
+st.write("")
+st.write("")
+
+# ---------------------------------------------------
+# FORM
+# ---------------------------------------------------
+
+st.markdown("""
+<div class="form-card">
+
+<div class="section-title">
+✨ Personalicemos la aventura
+</div>
+
+<div class="section-sub">
+Cuéntanos un poco sobre tu pequeño lector 💛
+</div>
+
+""", unsafe_allow_html=True)
+
+c1, c2 = st.columns(2)
+
+with c1:
+
+    nombre = st.text_input("👦 Nombre del niño")
+
+    edad = st.selectbox(
+        "🎂 Edad",
+        ["3 años", "4 años", "5 años", "6 años", "7 años", "8 años"]
+    )
+
+    color_favorito = st.selectbox(
+        "🎨 Color favorito",
+        ["Amarillo", "Azul", "Verde", "Rosado", "Morado", "Naranja"]
+    )
+
+    animal_favorito = st.text_input(
+        "🐻 Animal favorito"
+    )
+
+with c2:
+
+    emocion = st.selectbox(
+        "💛 ¿Cómo se siente últimamente?",
+        [
+            "Feliz",
+            "Tímido",
+            "Ansioso",
+            "Curioso"
+        ]
+    )
+
+    tipo_actividad = st.selectbox(
+        "🧩 Actividad favorita",
+        [
+            "Dibujar",
+            "Jugar",
+            "Contar historias",
+            "Explorar"
+        ]
+    )
+
+intereses = st.multiselect(
+    "🌟 Intereses favoritos",
+    [
+        "Animales",
+        "Espacio",
+        "Naturaleza",
+        "Arte",
+        "Música",
+        "Aventuras"
+    ]
+)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# ---------------------------------------------------
+# BOTON
+# ---------------------------------------------------
+
+st.write("")
+st.write("")
+
+if st.button("⭐ Crear mi AbraVentura"):
+
+    historia_base = next(
+        (
+            h["historia"]
+            for h in historias
+            if h["emocion"] == emocion
+        ),
+        random.choice(historias)["historia"]
+    )
+
+    historia_final = f"""
+    Hola {nombre} 💛
+
+    Hoy vivirás una aventura especial.
+
+    Tienes {edad},
+    tu color favorito es {color_favorito}
+    y tu animal favorito es {animal_favorito if animal_favorito else "un animal mágico"}.
+
+    Amas {", ".join(intereses) if intereses else "imaginar aventuras mágicas"}.
+
+    También disfrutas mucho {tipo_actividad.lower()}.
+
+    {historia_base}
+
+    🌈 Fin de la AbraVentura.
+    """
+
+    st.markdown(f"""
+    <div class="story-box">
+
+        <div class="story-title">
+        📖 Tu AbraVentura
+        </div>
+
+        <div class="story-text">
+        {historia_final}
+        </div>
+
+    </div>
+    """, unsafe_allow_html=True)
+
+# ---------------------------------------------------
+# FOOTER
+# ---------------------------------------------------
+
+st.markdown("""
+
+<div class="footer">
+💛 Hugger Island • Abraza • Conecta • Transforma
+</div>
+
+""", unsafe_allow_html=True)
