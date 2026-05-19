@@ -1,265 +1,374 @@
 # app.py
-# 💛 AbraVenturas - Hugger Island Edition
+# AbraVenturas ✨
+# Hugger Island inspired UI
 
 import streamlit as st
-import random
+from PIL import Image
 import os
+import random
 
-# ---------------- CONFIG ----------------
+# ---------------------------------------------------
+# CONFIG
+# ---------------------------------------------------
 
 st.set_page_config(
     page_title="AbraVenturas",
     page_icon="💛",
-    layout="wide",
+    layout="wide"
 )
 
-# ---------------- CSS ----------------
+# ---------------------------------------------------
+# HISTORIAS PREDEFINIDAS
+# ---------------------------------------------------
+
+historias = [
+
+    {
+        "emocion": "Ansioso",
+        "historia": """
+        Manuel sentía muchas maripositas en la barriga antes de dormir.
+        Entonces apareció Abrazador con una linterna mágica color verde.
+
+        —Las emociones no son monstruos —dijo Abrazador—,
+        son mensajes que quieren abrazos.
+
+        Juntos caminaron por un bosque brillante donde cada árbol
+        contaba una historia tranquila.
+
+        Al final, Manuel respiró profundo y descubrió que podía
+        sentirse valiente incluso cuando tenía miedo. 💛
+        """
+    },
+
+    {
+        "emocion": "Feliz",
+        "historia": """
+        Sofía despertó llena de energía y sonrisas.
+        Abrazador llegó saltando entre estrellas amarillas.
+
+        Juntos construyeron una ciudad de almohadas,
+        dibujos y canciones mágicas.
+
+        Cada risa hacía aparecer nuevas luces en el cielo.
+
+        Antes de dormir, Sofía entendió que compartir su alegría
+        hacía felices a los demás también. ✨
+        """
+    },
+
+    {
+        "emocion": "Tímido",
+        "historia": """
+        Lucas quería jugar,
+        pero las palabras se escondían dentro de él.
+
+        Entonces Abrazador le regaló una pequeña estrella morada.
+
+        Cada vez que Lucas sonreía,
+        la estrella brillaba más fuerte.
+
+        Poco a poco comenzó a hablar,
+        jugar y descubrir que ser tímido también puede ser hermoso. 🌈
+        """
+    },
+
+    {
+        "emocion": "Curioso",
+        "historia": """
+        Valentina tenía mil preguntas en su cabeza.
+
+        Abrazador la llevó a un planeta lleno de libros flotantes,
+        animales parlantes y puertas secretas.
+
+        Allí descubrió que hacer preguntas
+        era una forma mágica de explorar el mundo.
+
+        Desde ese día,
+        nunca dejó de imaginar aventuras nuevas. 🚀
+        """
+    }
+
+]
+
+# ---------------------------------------------------
+# CSS WOW ✨
+# ---------------------------------------------------
 
 st.markdown("""
 <style>
 
-/* ---------- FONDO ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+
+html, body, [class*="css"] {
+    font-family: 'Nunito', sans-serif;
+}
 
 .stApp {
     background: linear-gradient(
         180deg,
-        #FFF9F3 0%,
+        #FFF9F4 0%,
         #FFFDFB 100%
     );
 }
 
-/* ---------- ESCONDER MENU ---------- */
+/* ---------------- FLOATING BUBBLES ---------------- */
 
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-
-/* ---------- BURBUJAS ---------- */
+.bubbles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
 
 .bubble {
-    position: fixed;
+    position: absolute;
+    bottom: -120px;
     border-radius: 50%;
-    opacity: 0.18;
-    z-index: -1;
-    animation: float 9s ease-in-out infinite;
+    opacity: 0.25;
+    animation: rise 18s infinite ease-in;
 }
 
 .b1 {
-    width: 200px;
-    height: 200px;
-    background: #FFD166;
-    top: 5%;
-    left: 3%;
+    width: 120px;
+    height: 120px;
+    left: 10%;
+    background: #F7D66B;
+    animation-duration: 20s;
 }
 
 .b2 {
-    width: 260px;
-    height: 260px;
-    background: #B8E1DD;
-    top: 55%;
-    left: 70%;
+    width: 80px;
+    height: 80px;
+    left: 30%;
+    background: #A8DAD5;
+    animation-duration: 16s;
 }
 
 .b3 {
-    width: 180px;
-    height: 180px;
-    background: #CDB4DB;
-    top: 18%;
-    right: 5%;
+    width: 140px;
+    height: 140px;
+    left: 55%;
+    background: #F7C5E0;
+    animation-duration: 24s;
 }
 
 .b4 {
-    width: 120px;
-    height: 120px;
-    background: #FFD6A5;
-    bottom: 12%;
-    left: 18%;
+    width: 90px;
+    height: 90px;
+    left: 75%;
+    background: #C7E59B;
+    animation-duration: 17s;
 }
 
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-25px); }
-    100% { transform: translateY(0px); }
+.b5 {
+    width: 100px;
+    height: 100px;
+    left: 88%;
+    background: #BFA2DB;
+    animation-duration: 21s;
 }
 
-/* ---------- TITULO ---------- */
+@keyframes rise {
+    0% {
+        transform: translateY(0px);
+        opacity: 0;
+    }
 
-.main-title {
-    font-size: 74px;
-    font-weight: 800;
-    color: #2A7C76;
-    margin-bottom: 0px;
+    30% {
+        opacity: 0.25;
+    }
+
+    100% {
+        transform: translateY(-1200px);
+        opacity: 0;
+    }
 }
 
-.subtitle {
-    font-size: 28px;
-    color: #6A7B7B;
-    margin-top: -10px;
-}
+/* ---------------- HERO ---------------- */
 
-/* ---------- HERO ---------- */
-
-.hero-box {
+.hero {
     background: rgba(255,255,255,0.72);
-    border-radius: 30px;
+    border-radius: 35px;
     padding: 30px;
     backdrop-filter: blur(12px);
-    border: 2px solid rgba(255,255,255,0.5);
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.04);
-    margin-top: 20px;
-    margin-bottom: 40px;
-    color: #557070;
-    font-size: 20px;
-    line-height: 1.7;
+    box-shadow: 0px 10px 40px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
 }
 
-/* ---------- FORM ---------- */
+.hero-title {
+    font-size: 64px;
+    font-weight: 800;
+    color: #0F766E;
+    line-height: 1;
+}
+
+.hero-sub {
+    font-size: 28px;
+    color: #52796F;
+    margin-top: 10px;
+}
+
+/* ---------------- FORM ---------------- */
+
+.form-card {
+    background: rgba(255,255,255,0.75);
+    padding: 35px;
+    border-radius: 35px;
+    box-shadow: 0px 8px 35px rgba(0,0,0,0.05);
+    backdrop-filter: blur(12px);
+}
 
 .section-title {
-    color: #5C3D99;
     font-size: 42px;
-    font-weight: 700;
-    margin-bottom: 20px;
+    font-weight: 800;
+    color: #0F766E;
 }
 
-label {
-    color: #557070 !important;
-    font-weight: 600 !important;
+.section-sub {
+    color: #6B9080;
+    font-size: 20px;
+    margin-bottom: 30px;
 }
 
-/* ---------- INPUTS ---------- */
-
-.stTextInput input {
-    background: white !important;
-    border-radius: 18px !important;
-    border: 2px solid #E9E4DD !important;
-    color: #557070 !important;
-    height: 3.2rem;
-}
-
-.stSelectbox div[data-baseweb="select"] {
-    background: white !important;
-    border-radius: 18px !important;
-    border: 2px solid #E9E4DD !important;
-    color: #557070 !important;
-}
-
-.stMultiSelect div[data-baseweb="select"] {
-    background: white !important;
-    border-radius: 18px !important;
-    border: 2px solid #E9E4DD !important;
-    color: #557070 !important;
-}
-
-/* ---------- BOTON ---------- */
+/* ---------------- BUTTON ---------------- */
 
 .stButton button {
     background: linear-gradient(
-        135deg,
-        #FFD166 0%,
-        #FFB86B 100%
-    );
-    color: white;
-    border: none;
-    border-radius: 20px;
-    padding: 16px 30px;
-    font-size: 22px;
-    font-weight: 700;
-    box-shadow: 0px 10px 25px rgba(255,185,100,0.35);
+        90deg,
+        #0F766E,
+        #1D9A8C
+    ) !important;
+
+    color: white !important;
+    border-radius: 18px !important;
+    padding: 18px 30px !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+    border: none !important;
+    width: 100%;
     transition: 0.3s;
 }
 
 .stButton button:hover {
-    transform: scale(1.03);
+    transform: scale(1.02);
 }
 
-/* ---------- STORY ---------- */
+/* ---------------- INPUTS ---------------- */
 
-.story-card {
+.stTextInput input,
+.stSelectbox div[data-baseweb="select"] {
+    border-radius: 18px !important;
+}
+
+/* ---------------- STORY ---------------- */
+
+.story-box {
     background: white;
     border-radius: 30px;
     padding: 40px;
-    box-shadow: 0px 8px 30px rgba(0,0,0,0.05);
-    border: 3px solid #FFE3A3;
     margin-top: 30px;
+    border: 4px solid #F7D66B;
+    box-shadow: 0px 8px 30px rgba(0,0,0,0.04);
+}
+
+.story-title {
+    color: #0F766E;
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 20px;
 }
 
 .story-text {
-    color: #5B6B6B;
+    color: #4A5759;
     font-size: 22px;
-    line-height: 1.9;
+    line-height: 1.8;
 }
 
-/* ---------- PREGUNTAS ---------- */
-
-.question-box {
-    background: #FFF7E8;
-    padding: 20px;
-    border-radius: 20px;
-    margin-top: 15px;
-    color: #557070;
-    font-size: 18px;
-}
-
-/* ---------- FOOTER ---------- */
+/* ---------------- FOOTER ---------------- */
 
 .footer {
     text-align: center;
-    color: #8B8B8B;
     margin-top: 60px;
+    color: #52796F;
     font-size: 18px;
+    padding-bottom: 30px;
 }
 
 </style>
 
-<div class="bubble b1"></div>
-<div class="bubble b2"></div>
-<div class="bubble b3"></div>
-<div class="bubble b4"></div>
+<div class="bubbles">
+    <div class="bubble b1"></div>
+    <div class="bubble b2"></div>
+    <div class="bubble b3"></div>
+    <div class="bubble b4"></div>
+    <div class="bubble b5"></div>
+</div>
 
 """, unsafe_allow_html=True)
 
-# ---------------- HEADER ----------------
+# ---------------------------------------------------
+# HERO
+# ---------------------------------------------------
 
-col1, col2 = st.columns([1,2])
+col1, col2, col3 = st.columns([1,2,1])
 
 with col1:
-
     if os.path.exists("images/Abrazador_Imagen1.png"):
-        st.image("images/Abrazador_Imagen1.png", width=300)
+        st.image("images/Abrazador_Imagen1.png")
 
 with col2:
+    st.markdown("""
+    <div class="hero">
+        <div class="hero-title">
+            💛 AbraVenturas
+        </div>
 
-    st.markdown(
-        "<div class='main-title'>💛 AbraVenturas</div>",
-        unsafe_allow_html=True
-    )
+        <div class="hero-sub">
+            Historias que abrazan la imaginación ✨
+        </div>
 
-    st.markdown(
-        "<div class='subtitle'>Historias que abrazan la imaginación ✨</div>",
-        unsafe_allow_html=True
-    )
+        <br>
 
-# ---------------- HERO ----------------
+        <div style="
+            background:#FFFFFF;
+            padding:20px;
+            border-radius:20px;
+            color:#52796F;
+            font-size:22px;
+            line-height:1.6;
+        ">
+            🌈 Cada historia fortalece vínculos,
+            acompaña emociones y transforma
+            la lectura en un momento mágico.
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+with col3:
+    if os.path.exists("images/Abrazador_Imagen2.png"):
+        st.image("images/Abrazador_Imagen2.png")
+
+# ---------------------------------------------------
+# FORM
+# ---------------------------------------------------
 
 st.markdown("""
-<div class='hero-box'>
-🌈 Cada AbraVentura está diseñada para fortalecer vínculos,
-acompañar emociones y transformar la lectura en un momento
-de conexión entre niños y familias.
+<div class="form-card">
+<div class="section-title">
+✨ Personalicemos la aventura
+</div>
+
+<div class="section-sub">
+Cuéntanos un poco sobre tu pequeño lector 💛
 </div>
 """, unsafe_allow_html=True)
 
-# ---------------- FORMULARIO ----------------
+c1, c2 = st.columns(2)
 
-st.markdown(
-    "<div class='section-title'>✨ Personalicemos la aventura</div>",
-    unsafe_allow_html=True
-)
-
-colA, colB = st.columns(2)
-
-with colA:
-
+with c1:
     nombre = st.text_input("👦 Nombre del niño")
 
     edad = st.selectbox(
@@ -272,17 +381,14 @@ with colA:
         ["Amarillo", "Azul", "Verde", "Rosado", "Morado", "Naranja"]
     )
 
-with colB:
-
+with c2:
     emocion = st.selectbox(
         "💛 ¿Cómo se siente últimamente?",
         [
             "Feliz",
             "Tímido",
             "Ansioso",
-            "Curioso",
-            "Tranquilo",
-            "Inseguro"
+            "Curioso"
         ]
     )
 
@@ -292,136 +398,74 @@ with colB:
             "Dibujar",
             "Jugar",
             "Contar historias",
-            "Manualidades",
-            "Explorar",
-            "Movimiento"
+            "Explorar"
         ]
     )
 
 intereses = st.multiselect(
     "🌟 Intereses favoritos",
     [
-        "Dinosaurios",
-        "Espacio",
         "Animales",
-        "Princesas",
-        "Superhéroes",
-        "Océano",
-        "Magia",
-        "Carros",
+        "Espacio",
         "Naturaleza",
-        "Robots"
+        "Arte",
+        "Música",
+        "Aventuras"
     ]
 )
 
-# ---------------- GENERADOR ----------------
+st.markdown("</div>", unsafe_allow_html=True)
 
-def generar_historia():
+# ---------------------------------------------------
+# GENERAR
+# ---------------------------------------------------
 
-    intereses_txt = ", ".join(intereses) if intereses else "aventuras mágicas"
+if st.button("⭐ Crear mi AbraVentura"):
 
-    introducciones = [
-        f"Una tarde brillante, {nombre} encontró un pequeño Abrazador escondido detrás de una nube dorada.",
-        f"En una isla llena de estrellas suaves, {nombre} conoció a un Abrazador muy especial.",
-        f"Mientras exploraba un bosque de colores, {nombre} escuchó una vocecita mágica diciendo: 'Hola amigo 💛'."
-    ]
+    historia_base = next(
+        (
+            h["historia"]
+            for h in historias
+            if h["emocion"] == emocion
+        ),
+        random.choice(historias)["historia"]
+    )
 
-    aprendizajes = {
-        "Feliz": "descubrió que compartir la felicidad la hace crecer aún más.",
-        "Tímido": "aprendió que su voz también merece ser escuchada.",
-        "Ansioso": "aprendió a respirar profundo y sentir calma.",
-        "Curioso": "descubrió que hacer preguntas puede abrir puertas mágicas.",
-        "Tranquilo": "entendió que la calma también tiene poder.",
-        "Inseguro": "descubrió que dentro de sí ya existía valentía."
-    }
+    historia_final = f"""
+    Hola {nombre} 💛
 
-    final = aprendizajes.get(emocion)
+    Hoy vivirás una aventura especial.
 
-    historia = f"""
-    {random.choice(introducciones)}
+    Tu color favorito es {color_favorito},
+    amas {", ".join(intereses) if intereses else "imaginar cosas mágicas"}
+    y disfrutas mucho {tipo_actividad.lower()}.
 
-    Ese día comenzaron una aventura llena de {intereses_txt}.
-    
-    Mientras jugaban a {tipo_actividad.lower()},
-    el cielo empezó a brillar de color {color_favorito.lower()}.
+    {historia_base}
 
-    El Abrazador tomó la mano de {nombre} y le recordó
-    que todas las emociones son importantes 💛
-
-    Al final del viaje, {nombre} {final}
+    🌈 Fin de la AbraVentura.
     """
 
-    return historia
+    st.markdown(f"""
+    <div class="story-box">
 
-# ---------------- BOTON ----------------
-
-if st.button("✨ Crear mi AbraVentura"):
-
-    if nombre == "":
-        st.warning("Por favor escribe el nombre del niño 💛")
-
-    else:
-
-        historia = generar_historia()
-
-        st.markdown("## 📖 Tu AbraVentura")
-
-        st.markdown(
-            f"""
-            <div class='story-card'>
-                <div class='story-text'>
-                    {historia}
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.markdown("### 💬 Preguntas para conectar")
-
-        st.markdown("""
-        <div class='question-box'>
-        🌈 ¿Qué fue lo que más te gustó de la aventura?
+        <div class="story-title">
+        📖 Tu AbraVentura
         </div>
-        """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class='question-box'>
-        💛 ¿Cómo ayudó el Abrazador al personaje?
+        <div class="story-text">
+        {historia_final}
         </div>
-        """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class='question-box'>
-        ✨ ¿Qué otra aventura te gustaría vivir?
-        </div>
-        """, unsafe_allow_html=True)
+    </div>
+    """, unsafe_allow_html=True)
 
-        # -------- GALERIA --------
-
-        st.markdown("## 🌈 Tus amigos abrazadores")
-
-        c1, c2, c3 = st.columns(3)
-
-        with c1:
-            if os.path.exists("images/Abrazador_Imagen1.png"):
-                st.image("images/Abrazador_Imagen1.png")
-
-        with c2:
-            if os.path.exists("images/Abrazador_Imagen2.png"):
-                st.image("images/Abrazador_Imagen2.png")
-
-        with c3:
-            if os.path.exists("images/Abrazador_Imagen3.png"):
-                st.image("images/Abrazador_Imagen3.png")
-
-# ---------------- FOOTER ----------------
-
-st.markdown("---")
+# ---------------------------------------------------
+# FOOTER
+# ---------------------------------------------------
 
 st.markdown("""
-<div class='footer'>
-💛 AbraVenturas transforma historias en momentos de conexión,
-imaginación y amor compartido.
+<div class="footer">
+💛 Hugger Island • Abraza • Conecta • Transforma
 </div>
 """, unsafe_allow_html=True)
+
