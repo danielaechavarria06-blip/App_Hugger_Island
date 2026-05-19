@@ -1,19 +1,199 @@
+import streamlit as st
+from openai import OpenAI
+import os
+
+# ---------------- CONFIG ----------------
+
+st.set_page_config(
+    page_title="AbraVenturas",
+    page_icon="💛",
+    layout="wide"
+)
+
+# ---------------- ESTILOS ----------------
+
+st.markdown("""
+<style>
+
+html, body, [class*="css"] {
+    font-family: 'Arial', sans-serif;
+    background-color: #F8F5F2;
+}
+
+.main {
+    background-color: #F8F5F2;
+}
+
+.block-container {
+    padding-top: 0rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+}
+
+/* PORTADA */
+
+.portada-container img {
+    border-radius: 30px;
+    margin-bottom: 20px;
+}
+
+/* CARD */
+
+.form-card {
+    background: white;
+    padding: 40px;
+    border-radius: 30px;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.05);
+    margin-top: -30px;
+}
+
+/* TITULOS */
+
+h1 {
+    color: #0B7A75;
+    font-size: 55px !important;
+    font-weight: 800;
+}
+
+h2 {
+    color: #0B7A75;
+    font-size: 42px !important;
+    font-weight: 700;
+}
+
+p {
+    color: #6B8F8B;
+    font-size: 20px;
+}
+
+/* INPUTS */
+
+.stTextInput input {
+    border-radius: 15px;
+    border: 2px solid #EAEAEA;
+    padding: 14px;
+    background-color: white;
+    color: #333333;
+}
+
+.stSelectbox div[data-baseweb="select"] {
+    border-radius: 15px;
+}
+
+/* BOTON */
+
+.stButton button {
+    background: linear-gradient(90deg,#0B7A75,#12A39D);
+    color: white;
+    border-radius: 18px;
+    border: none;
+    padding: 16px 30px;
+    font-size: 22px;
+    font-weight: bold;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.stButton button:hover {
+    transform: scale(1.02);
+}
+
+/* HISTORIA */
+
+.story-box {
+    background: white;
+    padding: 35px;
+    border-radius: 30px;
+    margin-top: 30px;
+    border: 2px solid #F1E6D6;
+    color: #444444;
+    font-size: 20px;
+    line-height: 1.8;
+    box-shadow: 0px 10px 30px rgba(0,0,0,0.05);
+}
+
+/* BURBUJAS */
+
+.bubble {
+    position: fixed;
+    bottom: -100px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    animation: rise 15s infinite ease-in;
+    z-index: 0;
+}
+
+.bubble:nth-child(1){
+    width:40px;
+    height:40px;
+    left:10%;
+    animation-duration:12s;
+}
+
+.bubble:nth-child(2){
+    width:25px;
+    height:25px;
+    left:30%;
+    animation-duration:16s;
+}
+
+.bubble:nth-child(3){
+    width:60px;
+    height:60px;
+    left:50%;
+    animation-duration:18s;
+}
+
+.bubble:nth-child(4){
+    width:20px;
+    height:20px;
+    left:70%;
+    animation-duration:14s;
+}
+
+.bubble:nth-child(5){
+    width:50px;
+    height:50px;
+    left:90%;
+    animation-duration:20s;
+}
+
+@keyframes rise {
+    0%{
+        transform:translateY(0);
+        opacity:0;
+    }
+
+    50%{
+        opacity:0.5;
+    }
+
+    100%{
+        transform:translateY(-1200px);
+        opacity:0;
+    }
+}
+
+</style>
+
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+
+""", unsafe_allow_html=True)
+
+# ---------------- OPENAI ----------------
+
+client = OpenAI(
+    api_key=st.secrets["OPENAI_API_KEY"]
+)
+
 # ---------------- PORTADA ----------------
 
 if os.path.exists("portada.png"):
     st.image("portada.png", use_container_width=True)
-
-# ---------------- HEADER ----------------
-
-st.markdown("""
-<div class="hero-title">
-💛 AbraVenturas
-</div>
-
-<div class="hero-sub">
-Historias que abrazan la imaginación ✨
-</div>
-""", unsafe_allow_html=True)
 
 # ---------------- FORMULARIO ----------------
 
@@ -23,6 +203,8 @@ st.markdown("""
 <p>Cuéntanos un poco sobre tu pequeño lector 💛</p>
 </div>
 """, unsafe_allow_html=True)
+
+st.write("")
 
 # ---------------- CAMPOS ----------------
 
@@ -64,23 +246,21 @@ with col2:
         "💛 ¿Cómo se siente últimamente?",
         [
             "Feliz",
-            "Tímido",
             "Ansioso",
             "Curioso",
             "Tranquilo",
-            "Inseguro"
+            "Tímido"
         ]
     )
 
-    tipo_actividad = st.selectbox(
+    actividad = st.selectbox(
         "🧩 Actividad favorita",
         [
             "Dibujar",
-            "Jugar",
-            "Contar historias",
-            "Manualidades",
             "Explorar",
-            "Movimiento"
+            "Jugar",
+            "Leer",
+            "Contar historias"
         ]
     )
 
@@ -89,68 +269,63 @@ with col2:
 intereses = st.multiselect(
     "🌟 Intereses favoritos",
     [
-        "Dinosaurios",
-        "Espacio",
         "Animales",
-        "Princesas",
-        "Superhéroes",
-        "Océano",
-        "Magia",
-        "Carros",
+        "Espacio",
         "Naturaleza",
-        "Robots"
+        "Arte",
+        "Música",
+        "Aventuras",
+        "Ciencia"
     ]
 )
 
-# ---------------- BOTÓN ----------------
+st.write("")
+
+# ---------------- BOTON ----------------
 
 if st.button("⭐ Crear mi AbraVentura"):
 
-    historia = f"""
-    ## 🌈 La aventura de {nombre}
+    with st.spinner("Creando una aventura mágica... ✨"):
 
-    Un día, {nombre} salió a explorar un mundo lleno de colores {color_favorito.lower()}.
+        prompt = f"""
+        Crea una historia infantil MUY corta y tierna.
 
-    Mientras caminaba, apareció un personaje mágico llamado **Abrazador** 💛
+        Niño: {nombre}
+        Edad: {edad}
+        Color favorito: {color_favorito}
+        Emoción: {emocion}
+        Actividad favorita: {actividad}
+        Intereses: {intereses}
 
-    Juntos descubrieron un bosque encantado lleno de:
-    {", ".join(intereses) if intereses else "aventuras increíbles"}.
+        Debe aparecer un personaje llamado Abrazador.
 
-    Aunque a veces {nombre} se sentía {emocion.lower()},
-    aprendió que cada emoción tiene un superpoder especial ✨
+        La historia debe:
+        - durar menos de 1 minuto
+        - ser emocional
+        - ser muy tierna
+        - fomentar la imaginación
+        - tener final feliz
+        """
 
-    Después de jugar y {tipo_actividad.lower()},
-    Abrazador le dio un abrazo gigante y le recordó:
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {
+                    "role":"system",
+                    "content":"Eres un experto creando historias infantiles tiernas."
+                },
+                {
+                    "role":"user",
+                    "content":prompt
+                }
+            ],
+            temperature=0.9
+        )
 
-    > "Tu imaginación puede crear mundos maravillosos."
+        historia = response.choices[0].message.content
 
-    FIN 🌈
-    """
-
-    st.markdown(
-        f"""
+        st.markdown(f"""
         <div class="story-box">
         {historia}
         </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-# ---------------- GALERÍA ----------------
-
-st.markdown("## 🌈 Tus abrazadores")
-
-col3, col4, col5 = st.columns(3)
-
-with col3:
-    if os.path.exists("Abrazador_Imagen1.png"):
-        st.image("Abrazador_Imagen1.png")
-
-with col4:
-    if os.path.exists("Abrazador_Imagen2.png"):
-        st.image("Abrazador_Imagen2.png")
-
-with col5:
-    if os.path.exists("Abrazador_Imagen3.png"):
-        st.image("Abrazador_Imagen3.png")
-        
+        """, unsafe_allow_html=True)
